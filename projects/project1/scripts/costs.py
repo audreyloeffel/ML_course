@@ -31,11 +31,9 @@ def calculate_nll(y, tx, w):
 	xw = np.dot(tx, w)
 
 	yxw = y * xw
+
 	xw[xw<precLim] = np.log(1 + np.exp(xw[xw<precLim]))
 
 	loss = xw - yxw
 
-	#for i in range (N):
-	#    loss = loss + np.log(1 + np.exp(xw[i])) - y[i]*xw[i]
-
-	return -np.sum(loss, axis=0)
+	return -1/N * np.sum(loss, axis=0)

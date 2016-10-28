@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from costs import calculate_nll, compute_loss
-from least_squares import least_squares
 
 """
-	Ridge regression functions
+	Ridge regression function
 """
 
 def ridge_regression(y, tx, lambda_):
@@ -30,8 +29,8 @@ def sigmoid(t):
 	"""apply sigmoid function on t."""
 	precLim = 10
 	
-	t[t>=precLim] = 1
-	t[t<precLim] = 1/ (1 + np.exp(-t))
+	t[t<=-precLim] = 0
+	t[t>-precLim] = 1/ (1 + np.exp(-t))
 
 	return t
 
@@ -153,7 +152,7 @@ def reg_logisitic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 	for iter in range(max_iters):
 		w = learning_by_penalized_gradient(y, tx, w, gamma, lambda_)
 		loss = calculate_nll(y, tx, w)
-		if iter%20==0:
+		if iter%100==0:
 			print("Iter", iter, "loss =", loss)
 
 	loss = calculate_nll(y, tx, w) + lambda_ * w.T.dot(w)
