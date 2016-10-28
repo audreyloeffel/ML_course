@@ -11,7 +11,6 @@ def ridge_regression(y, tx, lambda_):
 	"""implement ridge regression."""
 	N = tx.shape[0]
 	M = tx.shape[1]
-
 	#w = np.dot(np.dot(np.linalg.inv(np.dot(tx.T, tx) + 2*N*lambda_*np.identity(M)), tx.T), y)
 	
 	A = np.dot(tx.T, tx) + 2*N*lambda_*np.identity(M)
@@ -19,8 +18,9 @@ def ridge_regression(y, tx, lambda_):
 
 	w = np.linalg.solve(A, b)
 	loss = compute_loss(y, tx, w)
+#	loss = calculate_nll(y, tx, w)
 
-	return loss, w
+	return w, loss
 
 """
 	Utilities for logistic regression
@@ -28,28 +28,17 @@ def ridge_regression(y, tx, lambda_):
 
 def sigmoid(t):
 	"""apply sigmoid function on t."""
-	precLim = 50
+	precLim = 10
+	
+	t[t>=precLim] = 1
+	t[t<precLim] = 1/ (1 + np.exp(-t))
 
-	pre = t 
-	for i in range (t.shape[0]):
-		elem = pre[i]
-		if elem>precLim:
-			pre[i] = 1
-		else:
-			if elem<-precLim:
-				pre[i] = 0
-			else:
-				pre[i] = np.exp(elem) / (1 + np.exp(elem))
-
-	return pre.reshape((pre.shape[0]))
+	return t
 
 def calculate_gradient(y, tx, w):
 	"""compute the gradient of loss."""
 
-	sig = sigmoid(np.dot(tx, w))
-	sigy = sig - y
-
-	ret = tx.T.dot(sigy)
+	ret = tx.T.dot(sigmoid(np.dot(tx, w)) - y)
 	return ret
 
 def calculate_hessian(y, tx, w):
@@ -71,27 +60,27 @@ def learning_by_gradient_descent(y, tx, w, gamma):
 	Do one step of gradient descent using logistic regression.
 	Return the loss and the updated w.
 	"""
-	loss = calculate_loss(y, tx, w)
 	grad = calculate_gradient(y, tx, w)
 
 	w = w - gamma * grad
-	return loss, w
+	return w
 
-def logistic_regression_gradient_descent(y, tx, gamma, max_iters):
-	w = np.zeros((tx.shape[1], 1))	
-	loss = 0
+def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
+	w = initial_w
+
 	for iter in range(max_iters):
-		loss, w = learning_by_gradient_descent(y, tx, w, gamma)
+		w = learning_by_gradient_descent(y, tx, w, gamma)
 
-	return loss, w
+	return w
 
 
 def default_logistic_regression(y, tx, w):
-	"""return the loss, gradient, and hessian."""
-	loss = calculate_nll(y, tx, w)
+	"""
+	Return the gradient, and hessian for normal logistic regression.
+	"""
 	gradient = calculate_gradient(y, tx, w)
 	H = calculate_hessian(y, tx, w)
-	return loss, gradient, H
+	return gradient, H
 
 def learning_by_newton_method(y, tx, w, gamma):
 	"""
@@ -99,70 +88,77 @@ def learning_by_newton_method(y, tx, w, gamma):
 	return the loss and updated w.
 	"""
 
-	loss, grad, H = default_logistic_regression(y, tx, w)
+	grad, H = default_logistic_regression(y, tx, w)
 	
 	hgrad = np.linalg.inv(H).dot(grad)
 	w = w - gamma * hgrad
-	return loss, w
+	return w
 
-def logistic_regression_newton_method(y, tx, gamma, max_iters):
-	w = np.zeros((tx.shape[1]))
-	loss = 0
+def logistic_regression_newton_method(y, tx, initial_w, max_iters, gamma):
+	w = initial_w
+
 	for iter in range(max_iters):
-		loss, w = learning_by_newton_method(y, tx, w, gamma)
+		w = learning_by_newton_method(y, tx, w, gamma)
 	
-	return loss, w
+	return w
 
 """ 
 	Logistic regression
 """
 
-def logistic_regression(y, tx, gamma, max_iters):
+def logistic_regression(y, tx, initial_w, max_iters, gamma):
 	"""
 	Do the logistic regression using gradient descent 
 	or Newton's technique, return loss, w
 	"""
-	loss, w = logistic_regression_newton_method(y, tx, gamma, max_iters)
-#	loss, w = logistic_regression_gradient_descent(y, tx, gamma, max_iters)
 
-	return loss, w
+#	w = logistic_regression_newton_method(y, tx, initial_w, max_iters, gamma)
+	w = logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma)
+	
+	loss = calculate_nll(y, tx, w)
+
+	return w, loss
 
 """
 	Penalized logistic regression learning
 """
 
 def penalized_logistic_regression(y, tx, w, lambda_):
-	"""return the loss, gradient, and hessian."""
-	loss = (calculate_nll(y, tx, w) + lambda_ * w.T.dot(w))
+	"""return the gradient, and hessian."""
 	gradient = calculate_gradient(y, tx, w) + 2.0 * lambda_ * w
 	H = calculate_hessian(y, tx, w) + 2.0 * lambda_
 	
-	return loss, gradient, H
+	return gradient, H
 
 def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
 	"""
 	Do one step of gradient descent, using the penalized logistic regression.
 	Return the loss and updated w.
 	"""
-	loss, grad, H = penalized_logistic_regression(y, tx, w, lambda_)
+	grad, H = penalized_logistic_regression(y, tx, w, lambda_)
 
 	hgrad = np.linalg.inv(H).dot(grad)
 
 	w = w - gamma * hgrad
 
-	return loss, w
+	return w
 
 """
 	Penalized logistic regression
 """
 
-def pen_logisitic_regression(y, tx, lambda_, gamma, max_iters):
-	w = np.zeros((tx.shape[1]))
-	loss = 0
+def reg_logisitic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
+	w = initial_w
+	
 	for iter in range(max_iters):
-		loss, w = learning_by_penalized_gradient(y, tx, w, gamma, lambda_)
+		w = learning_by_penalized_gradient(y, tx, w, gamma, lambda_)
+		loss = calculate_nll(y, tx, w)
+		if iter%20==0:
+			print("Iter", iter, "loss =", loss)
 
-	return loss, w
+	loss = calculate_nll(y, tx, w) + lambda_ * w.T.dot(w)
+
+	return w, loss
 
 
 
