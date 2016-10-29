@@ -44,3 +44,25 @@ def batch_iter(y, tx, batch_size, num_batches=None, shuffle=True):
         end_index = min((batch_num + 1) * batch_size, data_size)
         if start_index != end_index:
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
+
+def normalize(tX):
+    nullValue = -999
+    tX[tX==nullValue] = 0
+    m = np.mean(tX, axis=0)
+    tX_centered = tX - m
+
+    tX_centered[tX_centered==0] = float('nan')
+    tX_std= np.nanstd(tX_centered, axis=0)
+    tX_centered[tX_centered==float('nan')] = 0
+    normalized = tX_centered / tX_std
+    return normalized
+
+def polynomialBasis(tX, degree = 2):
+    tX_poly = tX
+    
+    for d in range(2, degree):
+        tX_d = np.power(tX, d)
+        tX_poly = np.hstack(tX_poly, tX_d)
+       
+    return tX_poly
+        

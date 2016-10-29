@@ -4,6 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from costs import *
+from least_squares import *
 from regression import *
 
 
@@ -17,9 +18,10 @@ def build_k_indices(y, k_fold, seed):
 	return np.array(k_indices)
 
 
-def cross_validation(y, x, k_indices, k, lambda_, initial_w, gamma):
+def cross_validation(y, x, k_fold, k, lambda_, initial_w, gamma, method):
 	"""return the loss of ridge regression."""
-	k_fold = k_indices.shape[0]
+	seed = 56
+	k_indices = build_k_indices(y, k_fold, seed)
 	train_x = []
 	train_y = []
 	for i in range (k_fold):
@@ -33,6 +35,30 @@ def cross_validation(y, x, k_indices, k, lambda_, initial_w, gamma):
 	test_tx = x[k_indices[k]]
 	test_y = y[k_indices[k]]
 
+	if method == "least_squares_GD" :
+		train_w, loss_tr = least_squares_GD(train_y, train_tx, initial_w, 5, gamma)
+		loss_te = compute_loss(test_y, test_tx, train_w)
+		return loss_tr, loss_te
+	elif method == "least_squares_SGD" :
+		train_w, loss_tr = least_squares_SGD(train_y, train_tx, initial_w, max_iters, gamma)
+		loss_te = loss = compute_loss(test_y, test_tx, train_w)
+		return loss_tr, loss_te
+	elif method == "least_squares" :
+		train_w, loss_tr = least_squares(train_y, train_tx)
+		loss = compute_loss(test_y, test_tx, train_w)
+		return loss_tr, loss_te
+	elif method == "ridge_regression" :
+		train_w, loss_tr = ridge_regression(train_y, train_tx, lambda_)
+		loss_te = compute_loss(test_y, test_tx, train_w)
+		return loss_tr, loss_te
+	elif method == "logistic_regression" :
+		train_w, loss_tr = logistic_regression(train_y, train_tx, initial_w, 20, gamma)
+		loss_te = calculate_nll(test_y, test_tx, train_w)
+		return loss_tr, loss_te        
+
+    
+	#TODO : add logistic regressions here  
+    
 	# Change here depending on what technique you want to cross validate
 #	train_w, loss_tr = ridge_regression(train_y, train_tx, lambda_)
 	train_w, loss_tr = reg_logisitic_regression(train_y, train_tx, lambda_, initial_w, 200, gamma)
@@ -74,7 +100,7 @@ def cross_validation_demo(y, x, initial_w, gamma, k_fold=2):
 		loss_test = []
 
 		for k in range (k_fold):
-			loss_tr, loss_te = cross_validation(y, x, k_indices, k, lamb, initial_w, gamma)
+			loss_tr, loss_te = cross_validation(y, x, k_fold, k, lamb, initial_w, gamma, "ridge_regression")
 			loss_train.append(loss_tr)
 			loss_test.append(loss_te)
 
