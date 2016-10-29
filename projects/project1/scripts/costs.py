@@ -36,4 +36,4 @@ def calculate_nll(y, tx, w):
 
 	loss = xw - yxw
 
-	return -1/N * np.sum(loss, axis=0)
+	return 1/N * np.sum(loss, axis=0)
