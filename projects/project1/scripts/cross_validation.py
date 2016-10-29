@@ -51,6 +51,11 @@ def cross_validation(y, x, k_fold, k, lambda_, initial_w, gamma, method):
 		train_w, loss_tr = ridge_regression(train_y, train_tx, lambda_)
 		loss_te = compute_loss(test_y, test_tx, train_w)
 		return loss_tr, loss_te
+	elif method == "logistic_regression" :
+		train_w, loss_tr = logistic_regression(train_y, train_tx, initial_w, 20, gamma)
+		loss_te = calculate_nll(test_y, test_tx, train_w)
+		return loss_tr, loss_te        
+
     
 	#TODO : add logistic regressions here  
     
