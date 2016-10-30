@@ -68,7 +68,13 @@ def logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma):
 	w = initial_w
 
 	for iter in range(max_iters):
-		w = learning_by_gradient_descent(y, tx, w, gamma)
+		nw = learning_by_gradient_descent(y, tx, w, gamma)
+		diff = np.linalg.norm(w - nw)
+		if iter%499==0:
+			print(diff)
+			print(nw)
+			print(w)
+		w = nw
 
 	return w
 
@@ -97,7 +103,10 @@ def logistic_regression_newton_method(y, tx, initial_w, max_iters, gamma):
 	w = initial_w
 
 	for iter in range(max_iters):
-		w = learning_by_newton_method(y, tx, w, gamma)
+		nw = learning_by_newton_method(y, tx, w, gamma)
+		diff = np.linalg.norm(w, nw)
+		print(nw)
+		w = nw
 	
 	return w
 
@@ -115,6 +124,8 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 	w = logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma)
 	
 	loss = calculate_nll(y, tx, w)
+    
+	print("loss =", loss)
 
 	return w, loss
 

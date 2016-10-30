@@ -52,7 +52,7 @@ def cross_validation(y, x, k_fold, k, lambda_, initial_w, gamma, method):
 		loss_te = compute_loss(test_y, test_tx, train_w)
 		return loss_tr, loss_te
 	elif method == "logistic_regression" :
-		train_w, loss_tr = logistic_regression(train_y, train_tx, initial_w, 20, gamma)
+		train_w, loss_tr = logistic_regression(train_y, train_tx, initial_w, 500, gamma)
 		loss_te = calculate_nll(test_y, test_tx, train_w)
 		return loss_tr, loss_te        
 
@@ -61,7 +61,7 @@ def cross_validation(y, x, k_fold, k, lambda_, initial_w, gamma, method):
     
 	# Change here depending on what technique you want to cross validate
 #	train_w, loss_tr = ridge_regression(train_y, train_tx, lambda_)
-	train_w, loss_tr = reg_logisitic_regression(train_y, train_tx, lambda_, initial_w, 200, gamma)
+	train_w, loss_tr = reg_logisitic_regression(train_y, train_tx, lambda_, initial_w, 1000, gamma)
 
 	# The loss either MSE or NLL depending on the technique
 #	loss_te = compute_loss(test_y, test_tx, train_w)
@@ -82,7 +82,7 @@ def cross_validation_visualization(lambds, mse_tr, mse_te):
 	plt.savefig("cross_validation")
 
 
-def cross_validation_demo(y, x, initial_w, gamma, k_fold=2):
+def cross_validation_demo(y, x, initial_w, gamma, k_fold=4):
 	seed = 56
 	# Cross validation on different lambdas, can also change for the gammas if wanted
 	lambdas = np.logspace(-4, 0, 30)
@@ -95,12 +95,12 @@ def cross_validation_demo(y, x, initial_w, gamma, k_fold=2):
 	n = len(lambdas)
 	for lamb in lambdas:
 		i = i+1
-		print("Step", i, "over", n)
+		print("Step", i, "over", n, "gamma =", lamb)
 		loss_train = []
 		loss_test = []
-
+# TODO: I changed gamma with lamb to change the gammas values !
 		for k in range (k_fold):
-			loss_tr, loss_te = cross_validation(y, x, k_fold, k, lamb, initial_w, gamma, "ridge_regression")
+			loss_tr, loss_te = cross_validation(y, x, k_fold, k, lamb, initial_w, lamb, "logistic_regression")
 			loss_train.append(loss_tr)
 			loss_test.append(loss_te)
 
