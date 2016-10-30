@@ -60,9 +60,9 @@ def normalize(tX):
 def polynomialBasis(tX, degree = 2):
     tX_poly = tX
     
-    for d in range(2, degree):
-        tX_d = np.power(tX, d)
-        tX_poly = np.hstack(tX_poly, tX_d)
+    for d in range(1, degree):
+        tX_d = np.power(tX, d+1)
+        tX_poly = np.hstack((tX_poly, tX_d))
        
     return tX_poly
         
