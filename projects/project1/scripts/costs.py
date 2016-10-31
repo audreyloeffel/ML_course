@@ -34,4 +34,4 @@ def calculate_nll(y, tx, w):
 	xw[xw<precLim] = np.log(1 + np.exp(xw[xw<precLim]))
 	loss = xw - yxw
 
-	return 1/N * np.sum(loss, axis=0)
+	return np.sum(loss, axis=0)

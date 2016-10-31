@@ -116,8 +116,8 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 	or Newton's technique, return loss, w
 	"""
 
-	w = logistic_regression_newton_method(y, tx, initial_w, max_iters, gamma)
-#	w = logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma)
+#	w = logistic_regression_newton_method(y, tx, initial_w, max_iters, gamma)
+	w = logistic_regression_gradient_descent(y, tx, initial_w, max_iters, gamma)
 	
 	loss = calculate_nll(y, tx, w)
 
