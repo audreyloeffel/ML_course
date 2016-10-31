@@ -25,18 +25,19 @@ def ridge_regression(y, tx, lambda_):
 	Utilities for logistic regression
 """
 
-def sigmoid(t):
-	"""apply sigmoid function on t."""
-	precLim = 10
-	
-	t[t<=-precLim] = 0
-	t[t>-precLim] = 1/ (1 + np.exp(-t))
 
-	return t
+def apply_(v):
+	if(v > 0) :
+		return 1/ (1 + np.exp(-v))
+	else:
+		return np.exp(v) / (1 + np.exp(v))
+
+sigmoid = np.vectorize(apply_)  
+
 
 def calculate_gradient(y, tx, w):
 	"""compute the gradient of loss."""
-
+	print(np.dot(tx, w))
 	ret = tx.T.dot(sigmoid(np.dot(tx, w)) - y)
 	return ret
 
