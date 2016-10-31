@@ -40,7 +40,7 @@ The current folder contains three folders:
 
 
 NB: This project was done by Audrey Loeffel, Joachim Huet and for the last 2 hours 
-before the submission deadline, the third person of the group - Yalan Yiue - finally came add 2 or 3 
+before the submission deadline, the third person of the group - Yalan Yiue - finally managed to add 2 or 3 
 sentences in the report... 
 
 
