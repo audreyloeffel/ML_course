@@ -15,16 +15,6 @@ in scripts/
 		- least_squares.py --- Contains all least squares's relative functions that we use in our code
 		- regression.py --- Contains all the regression's relative functions that we use in our code
 		
-		Notebooks :
-		
-		- project1.ipynb --- Contains a lot of unorganized code, we used it for some test and as a source of code
-			for the much more organised and used files.
-		- Logistic Regression --- Contains the improvements for logistic regression, the cross validation of this model
-		- Ridge Regression --- Contains the analysis and improvements of the Ridge Regression model.
-		- Test --- Contains a try to improve least squares but finally we changed our focus to ridge regression so not complete.
-		- log_train --- Contains the pre-process features analysis. Correlations between the differents features of the data.
-		- final_method  --- Contains the code that we used for the final submission, our 'optimal prediction'
-
 	List of files for submission:
 		- run.py --- Is the file that we can run to have our last submission output
 		- submissions.py --- The submission file containing the 6 methods we had to implement 

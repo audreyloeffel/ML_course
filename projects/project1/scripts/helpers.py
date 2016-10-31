@@ -57,12 +57,22 @@ def normalize(tX):
     normalized = tX_centered / tX_std
     return normalized
 
-def polynomialBasis(tX, degree = 2):
+def polynomialBasis(tX, degree = 2, combi = False):
     tX_poly = tX
     
     for d in range(1, degree):
         tX_d = np.power(tX, d+1)
         tX_poly = np.hstack((tX_poly, tX_d))
+   
+    if combi :
+        nb = tX.shape[1]
+        for i in range(nb): 
+            print("Iteration: ", i)
+            for j in range(10, 20):
+                if(i!=j):
+                    coli = tX[:, i]
+                    colj = tX[:, j]
+                    tX_poly = np.hstack((tX_poly, (coli * colj).reshape(tX.shape[0], 1)))
        
     return tX_poly
         
