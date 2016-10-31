@@ -5,90 +5,66 @@
 
 
 \begin{document}
-\title{Writing Scientific Papers and Software}
+\title{\#70 - Higgs Boson's Challenge}
 
 \author{
-  Cheng Soon Ong\\
-  \textit{Department of Computer Science, ETH Zurich, Switzerland}
+  Audrey Loeffel, Joachim Huet\\
+  \textit{PCML Project 1, 2016}
 }
 
 \maketitle
 
 \begin{abstract}
-  A critical part of scientific discovery is the
-  communication of research findings to peers or the general public.
-  Mastery of the process of scientific communication improves the
-  visibility and impact of research. While this guide is a necessary
-  tool for learning how to write in a manner suitable for publication
-  at a scientific venue, it is by no means sufficient, on its own, to
-  make its reader an accomplished writer. 
-  This guide should be a starting point for further development of 
-  writing skills.
+
 \end{abstract}
 
 \section{Introduction}
 
-The aim of writing a paper is to infect the mind of your reader with
-the brilliance of your idea~\cite{jones08}. 
-The hope is that after reading your
-paper, the audience will be convinced to try out your idea. In other
-words, it is the medium to transport the idea from your head to your
-reader's head. 
-In the following
-section, we show a common structure of scientific papers and briefly
-outline some tips for writing good papers in
-Section~\ref{sec:tips-writing}.
+This project gives the methodology in details of what we have done to compute a 
+prediction model for the Higgs Boson's challenge in Kaggle, provided by CERN data
+for a practical and scientific use.
+In order to compute this model we had a limitation in the methods we could use, 
+that is only the simple models that we already saw in class including 
+the gradient descent, the least squares method and the linear regression.
 
-At that
-point, it is important that the reader is able to reproduce your
-work~\cite{schwab00,wavelab,gentleman05}. This is why it is also
-important that if the work has a computational component, the software
-associated with producing the results are also made available in a
-useful form. Several guidelines for making your user's experience with
-your software as painless as possible is given in
-Section~\ref{sec:tips-software}.
+So the challenge was to find a pretty good estimation using only a few models 
+that certainly can't represent perfectly this data set.
 
-This brief guide is by no means sufficient, on its own, to
-make its reader an accomplished writer. The reader is urged to use the
-references to further improve his or her writing skills.
-
-\section{The Structure of a Paper}
+\section{Methodology}
 \label{sec:structure-paper}
 
-Scientific papers usually begin with the description of the problem,
-justifying why the problem is interesting. Most importantly, it argues
-that the problem is still unsolved, or that the current solutions are
-unsatisfactory. This leads to the main gist of the paper, which is
-``the idea''. The authors then show evidence, using derivations or
-experiments, that the idea works. Since science does not occur in a
-vacuum, a proper comparison to the current state of the art is often
-part of the results. Following these ideas, papers usually have the
-following structure:
-\begin{description}
-\item[Abstract] \ \\
-  Short description of the whole paper, to help the
-  reader decide whether to read it.
-\item[Introduction] \ \\
-  Describe your problem and state your
-  contributions.
-\item[Models and Methods] \ \\
-  Describe your idea and how it was implemented to solve
-  the problem. Survey the related work, giving credit where credit is
-  due.
-\item[Results] \ \\
-  Show evidence to support your claims made in the
-  introduction.
-\item[Discussion] \ \\
-  Discuss the strengths and weaknesses of your
-  approach, based on the results. Point out the implications of your
-  novel idea on the application concerned.
-\item[Summary] \ \\
-  Summarize your contributions in light of the new
-  results.
-\end{description}
+We followed a long path in order to improve our result, from random inneficient
+prediction to polynomial basis model constructed and regression used to find a 
+weights vector more representative. 
 
+Our implementation took some preparation steps that we will present below.
 
-\section{Tips for Good Writing}
+\subsection{Pre-computational analysis}
+As the title suggest, before even trying a model we decided to analyse the
+data entries in order to possibly find some correlations between the features 
+and/or the supposed outputs. 
+
+Our results were not decisive at all, we didn't manage to find something 
+interesting noting that we couldn't use the python libraries at all to compute 
+some data analysis so we was limited in this by the contest reglementation and 
+the time we had. 
+So for the features we finally choose to keep them all and treat the data all as a one, 
+without needing a preselection of interesting data. 
+
+Then we managed the missing values (-999) before the standardization by 
+setting each of them to the mean value in order to avoid a bad contribution 
+for the model computing phase.
+
+\subsection{Models comparisons}
+Then we tried to use multiple of our models to see what was the outcoming results
+and compare them one to another to have a first idea of what kind of data we are facing.
+So we trained on the prepared dataset with least squares, gradient descent, 
+stochastic gradient descent, and the regression models we had implemented.
+
+What we came to was surprising, the logistic regressions models were not converging,
+and we the best results we seems to have was with the least squares model.
+
+\section{Improvements of simple models}
 \label{sec:tips-writing}
 
 The ideas for good writing have come

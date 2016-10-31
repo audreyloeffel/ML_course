@@ -29,7 +29,35 @@ def predict_labels(weights, data):
     y_pred = np.dot(data, weights)
     y_pred[np.where(y_pred <= 0)] = -1
     y_pred[np.where(y_pred > 0)] = 1
-    
+    """   
+    for i in range (data.shape[0]):
+        one = 0
+        if data[i, 4] > 40:
+            one = one+1
+            y_pred[i] = 1
+        if data[i, 5] > 6:
+            one = one+1
+            y_pred[i] = 1
+            
+        if data[i, 1] > 20:
+            one = one+1
+            y_pred[i] = -1
+        if data[i, 3] > 20:
+            one = one+1
+            y_pred[i] = -1
+        if data[i, 22] > 10:
+            one = one+1
+            y_pred[i] = -1
+        if data[i, 27] > 22:
+            one = one+1
+            y_pred[i] = -1
+        if data[i, 30] > 13:
+            one = one+1
+            y_pred[i] = -1
+        
+        
+    print(one)
+    """
     return y_pred
 
 
