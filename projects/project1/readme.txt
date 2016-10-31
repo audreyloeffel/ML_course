@@ -1,8 +1,16 @@
------------
-| Content :
------------
-in scripts/
--------------
+Higgs Boson's Challenge - Group 70
+----------------------------------
+
+How to run:
+
+- The data should be in a folder /data
+- The output is written in a folder /output
+
+Submission content :
+
+The current folder contains three folders:
+
+- scripts/
 	List of used files : 
 		Python files :
 		
@@ -17,25 +25,22 @@ in scripts/
 		
 	List of files for submission:
 		- run.py --- Is the file that we can run to have our last submission output
-		- submissions.py --- The submission file containing the 6 methods we had to implement 
-			at the end of the file. But it also contains all the necesary functions for our functions
+		- implementation.py --- The file contains the 6 methods we had to implement 
+			at the end of the file. But it also contains all the necesary functions (like sigmoid, or polynomialBasis) for our functions
 			to run correctly.
 	
-
-in data/
---------
-	This folder, as indicated by it's name contains the data for the higgs boson challenge :
+- data/
+	This folder, as indicated by its name contains the data for the higgs boson challenge :
 	- test.csv	--- The testing set for which we should predict the outputs
 	- train.csv	--- The training set on which we train our model
 
-in output/
-----------
+- output/
 	This folder contains the output of our model prediction :
 	- out.csv --- File containing our best prediction output
 
 
-This project content was done by Audrey Loeffel, Joachim Huet and in the 2 last hours 
-before submission deadline, the third person of the group - Yalan Yiue - finally came add 2 or 3 
-words in the report. 
+NB: This project was done by Audrey Loeffel, Joachim Huet and for the last 2 hours 
+before the submission deadline, the third person of the group - Yalan Yiue - finally came add 2 or 3 
+sentences in the report... 
 
 
