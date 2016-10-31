@@ -85,7 +85,7 @@ def cross_validation_visualization(lambds, mse_tr, mse_te):
 def cross_validation_demo(y, x, initial_w, gamma, k_fold=4):
 	seed = 56
 	# Cross validation on different lambdas, can also change for the gammas if wanted
-	lambdas = np.logspace(-4, 0, 30)
+	lambdas = np.logspace(-20, -5, 30)
 	# split data in k fold
 	k_indices = build_k_indices(y, k_fold, seed)
 	# define lists to store the loss of training data and test data
@@ -98,7 +98,7 @@ def cross_validation_demo(y, x, initial_w, gamma, k_fold=4):
 		print("Step", i, "over", n, "gamma =", lamb)
 		loss_train = []
 		loss_test = []
-# TODO: I changed gamma with lamb to change the gammas values !
+        
 		for k in range (k_fold):
 			loss_tr, loss_te = cross_validation(y, x, k_fold, k, lamb, initial_w, lamb, "logistic_regression")
 			loss_train.append(loss_tr)

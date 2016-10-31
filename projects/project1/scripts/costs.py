@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""a function used to compute the loss."""
+"""
+	Contains the costs function compute_loss (mse or mae), 
+	and calculate_nll (negative log likelihood)
+"""
 
 import numpy as np
 
