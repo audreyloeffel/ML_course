@@ -203,11 +203,12 @@ def validate(y, x, k_fold=10, seed=42):
 
 def loss_log_likelihood(y, tx, w):
     
-    l = 0
+    l = 0.0
     for n in range(y.shape[0]):
-        l += (np.log(1 + np.exp(np.dot(tx[n].T, w))) - y[n] * np.dot(tx[n].T, w))
+        l += np.log(1 + np.exp(np.dot(tx[n].T, w))) - (y[n] * np.dot(tx[n].T, w))
 
-    return l / y.shape[0]
+        
+    return l[0] / y.shape[0]
 
 
 def logistic_GD(y, tx, initial_w, max_iters=10000, gamma=0.001):
@@ -215,7 +216,6 @@ def logistic_GD(y, tx, initial_w, max_iters=10000, gamma=0.001):
     threshold = 1e-8
     losses = []
     w = initial_w
-    
     for iter in range(max_iter):
         w -= gamma * np.dot(tx.T, expit(np.dot(tx, w)) - y)
         loss = loss_log_likelihood(y, tx, w)
@@ -226,8 +226,52 @@ def logistic_GD(y, tx, initial_w, max_iters=10000, gamma=0.001):
     return losses[-1], w
 
 
-def predict_log(weights, data):
-    y_pred = expit(np.dot(data, weights))
+def reg_logistic_regression(y, tx, lamb, initial_w, max_iters=10000, gamma=0.001):
+    
+    """
+    w = initial_w
+    for mini_y, mini_tx in batch_iter(y, tx, batch_size):
+        w -= gamma * np.dot(mini_tx.T, expit(np.dot(mini_tx, w)) - mini_y) + 2 * lamb * w
+    """   
+        
+    threshold = 1e-8
+    losses = []
+    w = initial_w
+    for iter in range(max_iters):
+        w -= gamma * np.dot(tx.T, expit(np.dot(tx, w)) - y) + 2 * lamb * w
+        loss = np.abs(np.sum(np.log(1 + np.exp(np.dot(tx, w))) - y * np.dot(tx, w))) / y.shape[0]
+        losses.append(loss)
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
+            break
+    
+    return loss_log_likelihood(y, tx, w), w
+
+
+def reg_logistic_regression_SGD(y, tx, lamb, initial_w, max_iters=10000, gamma=0.001):
+    
+    w = initial_w
+    batch_size = 1
+    for mini_y, mini_tx in batch_iter(y, tx, batch_size):
+        w -= gamma * np.dot(mini_tx.T, expit(np.dot(mini_tx, w)) - mini_y) + 2 * lamb * w
+     
+    """   
+    threshold = 1e-8
+    losses = []
+    w = initial_w
+    for iter in range(max_iters):
+        w -= gamma * np.dot(tx.T, expit(np.dot(tx, w)) - y) + 2 * lamb * w
+        loss = loss_log_likelihood(y, tx, w)
+        losses.append(loss)
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
+            break
+    """
+    l = np.abs(np.sum(np.log(1 + np.exp(np.dot(tx, w))) - y * np.dot(tx, w)) + np.dot(lamb * w, w)) / y.shape[0]
+    
+    return l, w
+
+
+def predict_log(data, w):
+    y_pred = expit(np.dot(data, w))
     y_pred[np.where(y_pred < 0.5)] = -1
     y_pred[np.where(y_pred >= 0.5)] = 1
     
